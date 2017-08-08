@@ -22,4 +22,8 @@ public class Constraints {
         if (position.x < left) position.x = left;
         if (position.x > right) position.x = right;
     }
+
+    public boolean outside(Vector2D position){
+        return position.x < left || position.x > right || position.y < top || position.y > bottom;
+    }
 }

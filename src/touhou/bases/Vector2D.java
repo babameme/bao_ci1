@@ -16,6 +16,14 @@ public class Vector2D {
         this.y = y;
     }
 
+    @Override
+    public String toString() {
+        return "Vector2D{" +
+                "x=" + x +
+                ", y=" + y +
+                '}';
+    }
+
     public void addUp(float dx, float dy) {
         this.x += dx;
         this.y += dy;
@@ -70,5 +78,9 @@ public class Vector2D {
     public Vector2D normalize() {
         float mag = magnitude();
         return new Vector2D(this.x / mag, this.y / mag);
+    }
+
+    public float dis(Vector2D other){
+        return (float)Math.sqrt((this.x - other.x) * (this.x - other.x) + (this.y - other.y) * (this.y - other.y));
     }
 }

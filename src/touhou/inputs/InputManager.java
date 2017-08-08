@@ -13,6 +13,7 @@ public class InputManager {
     public boolean leftPressed;
     public boolean rightPressed;
     public boolean xPressed;
+    //public boolean releasedLR;
 
     public void keyPressed(KeyEvent e) {
         switch (e.getKeyCode()) {
@@ -35,12 +36,15 @@ public class InputManager {
     }
 
     public void keyReleased(KeyEvent e) {
+        //releasedLR = false;
         switch (e.getKeyCode()) {
             case VK_RIGHT:
                 rightPressed = false;
+                //releasedLR = true;
                 break;
             case VK_LEFT:
                 leftPressed = false;
+                //releasedLR = true;
                 break;
             case VK_UP:
                 upPressed = false;

@@ -9,9 +9,13 @@ import java.awt.image.BufferedImage;
  * Created by huynq on 8/5/17.
  */
 public class ImageRenderer {
-    public BufferedImage image;
+    private BufferedImage image;
 
     public ImageRenderer(BufferedImage image) {
+        this.image = image;
+    }
+
+    public void setImage(BufferedImage image) {
         this.image = image;
     }
 
