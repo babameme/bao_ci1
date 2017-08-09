@@ -23,7 +23,7 @@ public class PlayerSpell {
     private Animation animation;
     private BufferedImage[] imageSprite;
     private Vector2D direction;
-    private int blood = 3;
+    private int blood = 2;
     private int damage = 1;
     private boolean pow;
 
