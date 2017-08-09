@@ -5,7 +5,7 @@ import touhou.GameWindow;
  * Created by huynq on 7/4/17.
  */
 public class Program {
-    public static void main(String[] args) {
+    public static void main(String[] args) throws InterruptedException {
         GameWindow gameWindow = new GameWindow();
         gameWindow.loop();
         //Character bao = new Character("Bao",2,6);

@@ -19,6 +19,7 @@ import java.awt.event.WindowEvent;
 import java.awt.image.BufferedImage;
 import java.util.ArrayList;
 import java.util.Random;
+import java.util.concurrent.TimeUnit;
 
 import static java.awt.event.KeyEvent.*;
 
@@ -45,6 +46,7 @@ public class GameWindow extends Frame {
     ArrayList<PlayerSpell> playerSpells = new ArrayList<PlayerSpell>();
     ArrayList<EnemyBullet> enemyBullets = new ArrayList<EnemyBullet>();
     ArrayList<Enemy> enemies = new ArrayList<Enemy>();
+    private BufferedImage gameOver = SpriteUtils.loadImage("assets/images/gameover.png");
 
     InputManager inputManager = new InputManager();
 
@@ -77,7 +79,7 @@ public class GameWindow extends Frame {
     }
 
     private void setupWindow() {
-        this.setSize(854, 650);
+        this.setSize(684, 650);
 
         this.setTitle("Touhou - Remade by QHuyDTVT");
         this.setVisible(true);
@@ -111,7 +113,7 @@ public class GameWindow extends Frame {
         });
     }
 
-    public void loop() {
+    public void loop() throws InterruptedException {
         while(true) {
             if (lastTimeUpdate == -1) {
                 lastTimeUpdate = System.nanoTime();
@@ -158,10 +160,30 @@ public class GameWindow extends Frame {
         System.out.println(Integer.toString(player.getBlood()));
     }
 
-    private void render() {
+    private void render() throws InterruptedException {
         backbufferGraphics.setColor(Color.black);
-        backbufferGraphics.fillRect(0, 0, 854, 650);
+        backbufferGraphics.fillRect(0, 0, 684, 650);
         backbufferGraphics.drawImage(background, backgroundX, backgroundY, null);
+        backbufferGraphics.setColor(Color.orange);
+        backbufferGraphics.fillRect(384, 0,300,50);
+        backbufferGraphics.setColor(Color.RED);
+        backbufferGraphics.fillRect(384,0, player.getBlood() * 10, 50);
+
+        backbufferGraphics.setRenderingHint(RenderingHints.KEY_ANTIALIASING,
+                RenderingHints.VALUE_ANTIALIAS_ON);
+        Font font = new Font("Serif", Font.PLAIN, 21);
+        backbufferGraphics.setFont(font);
+        backbufferGraphics.setColor(Color.white);
+        backbufferGraphics.drawString("Your blood :   " + Integer.toString(player.getBlood()), 400, 90);
+        if (player.getBlood() <= 0){
+            Font nfont = new Font("Serif", Font.PLAIN, 80);
+            backbufferGraphics.setFont(nfont);
+            backbufferGraphics.setColor(Color.white);
+            backbufferGraphics.drawString("GAME OVER", 100, 50);
+            //Thread.sleep(4000);
+            //System.exit(0);
+        }
+
         player.render(backbufferGraphics);
 
         for (PlayerSpell playerSpell: playerSpells) {

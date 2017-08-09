@@ -110,9 +110,23 @@ public class Enemy {
             }
         }
     }
+
+    public void castType3(){
+        for (int i = -5; i <= 5 ; i++) {
+            cast(i * 40, 20, 0, 3);
+        }
+    }
+
     public void castBullet(){
         if (coolDownCounter.run() && !bulletLock) {
-            castType2();
+            Random generator = new Random();
+            int t = generator.nextInt(3);
+            if (t == 0)
+                castType1();
+            if (t == 1)
+                castType2();
+            if (t == 2)
+                castType3();
             bulletLock = true;
             coolDownCounter.reset();
         }
