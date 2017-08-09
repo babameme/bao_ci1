@@ -10,6 +10,7 @@ public class Animation {
     private final int totalFrame;
     private FrameCounter frameCounter;
     private FrameCounter currentFrame;
+    private boolean resetFrame ;
 
     private ArrayList<Frame> frames = new ArrayList<Frame>();
 
@@ -23,6 +24,7 @@ public class Animation {
         for (int i = 0; i < frames.length; i++) {
             addFrame(frames[i], countMax);
         }
+        this.resetFrame = false;
     }
 
     public FrameCounter getCurrentFrame() {
@@ -47,10 +49,19 @@ public class Animation {
         return frames.get(currentFrame.getCount()).getFrame();
     }
 
+    public boolean isResetFrame() {
+        return resetFrame;
+    }
+
     public void update(){
         if (frameCounter.run()){
             frameCounter.reset();
             currentFrame.coolDown();
+            //if (currentFrame.run()){ @@@@@@ Hoi 2 anh, cai nay # gi voi coolDown ma em bo vao thi sai
+            //    currentFrame.reset();
+            //}
         }
+        if (frameCounter.getCount() == 0 && currentFrame.getCount() == 0)
+            resetFrame = true;
     }
 }

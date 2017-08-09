@@ -24,6 +24,7 @@ public class Enemy {
     private Vector2D direction = new Vector2D(0,2);
     private int blood = 15;
     private int damage = 2;
+    private boolean boss;
 
     public Enemy(int type) {
         //System.out.println("New enemy type : " + Integer.toString(type));
@@ -32,14 +33,16 @@ public class Enemy {
         this.position = new Vector2D( generator.nextInt(384), 50);
         //System.out.println(Float.toString(position.x));
         //System.out.println(Float.toString(position.y));
+        this.boss = false;
         if (type == 0){
-            imageSprite = Sprite.getSprites("assets/images/enemies/level0/black/", 9);
+            imageSprite = Sprite.getSprites("assets/images/enemies/level0/pink/", 4);
         }
         else if (type == 1){
             imageSprite = Sprite.getSprites("assets/images/enemies/level0/blue/", 4);
         }
         else {
-            imageSprite = Sprite.getSprites("assets/images/enemies/level0/pink/", 4);
+            imageSprite = Sprite.getSprites("assets/images/enemies/level0/black/", 9);
+            boss = true;
         }
         animation = new Animation(imageSprite, 5);
         coolDownCounter = new FrameCounter(100);
@@ -47,8 +50,20 @@ public class Enemy {
         this.setConstraints(new Constraints(31, 650, 8, 384));
     }
 
+    public void setPosition(Vector2D position) {
+        this.position = position;
+    }
+
     public int getBlood() {
         return blood;
+    }
+
+    public void setDirection(Vector2D direction) {
+        this.direction = direction;
+    }
+
+    public void setCoolDownCounter(FrameCounter coolDownCounter) {
+        this.coolDownCounter = coolDownCounter;
     }
 
     public void setBlood(int blood) {
@@ -112,21 +127,32 @@ public class Enemy {
     }
 
     public void castType3(){
-        for (int i = -5; i <= 5 ; i++) {
+        for (int i = -3; i <= 3 ; i++) {
             cast(i * 40, 20, 0, 3);
+        }
+    }
+
+    public void castType4(){
+        for (int i = - 7; i <= 7; i++){
+            cast(i * 30, 30, i, 3);
         }
     }
 
     public void castBullet(){
         if (coolDownCounter.run() && !bulletLock) {
-            Random generator = new Random();
-            int t = generator.nextInt(3);
-            if (t == 0)
-                castType1();
-            if (t == 1)
-                castType2();
-            if (t == 2)
-                castType3();
+            if (this.boss){
+                castType4();
+            }
+            else {
+                Random generator = new Random();
+                int t = generator.nextInt(3);
+                if (t == 0)
+                    castType1();
+                if (t == 1)
+                    castType2();
+                if (t == 2)
+                    castType3();
+            }
             bulletLock = true;
             coolDownCounter.reset();
         }

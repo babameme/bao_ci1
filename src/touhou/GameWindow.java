@@ -1,11 +1,16 @@
 package touhou;
 
 import tklibs.SpriteUtils;
+import touhou.animation.Animation;
+import touhou.animation.Sprite;
 import touhou.bases.Constraints;
 import touhou.bases.FrameCounter;
 import touhou.bases.RemoveOutside;
+import touhou.bases.Vector2D;
+import touhou.bases.renderers.ImageRenderer;
 import touhou.enemies.Enemy;
 import touhou.enemies.EnemyBullet;
+import touhou.explosion.Explosion;
 import touhou.impact.Impact;
 import touhou.inputs.InputManager;
 import touhou.players.Player;
@@ -46,7 +51,10 @@ public class GameWindow extends Frame {
     ArrayList<PlayerSpell> playerSpells = new ArrayList<PlayerSpell>();
     ArrayList<EnemyBullet> enemyBullets = new ArrayList<EnemyBullet>();
     ArrayList<Enemy> enemies = new ArrayList<Enemy>();
+    ArrayList<Explosion> explosions = new ArrayList<>();
     private BufferedImage gameOver = SpriteUtils.loadImage("assets/images/gameover.png");
+    private Enemy boss = new Enemy(2);
+    private int addBoss = 0;
 
     InputManager inputManager = new InputManager();
 
@@ -61,12 +69,15 @@ public class GameWindow extends Frame {
         removeOutside.setEnemies(enemies);
         removeOutside.setEnemyBullets(enemyBullets);
         removeOutside.setPlayerSpells(playerSpells);
+        removeOutside.setExplosions(explosions);
 
         impact.setEnemies(enemies);
         impact.setEnemyBullets(enemyBullets);
         impact.setPlayerSpells(playerSpells);
         impact.setEnemyBullets(enemyBullets);
         impact.setPlayer(player);
+        impact.setExplosions(explosions);
+
 
         //System.out.println(player.getPosition().toString());
 
@@ -81,7 +92,7 @@ public class GameWindow extends Frame {
     private void setupWindow() {
         this.setSize(684, 650);
 
-        this.setTitle("Touhou - Remade by QHuyDTVT");
+        this.setTitle("Touhou - Remade by babameme");
         this.setVisible(true);
 
         this.backbufferImage = new BufferedImage(getWidth(), getHeight(), BufferedImage.TYPE_INT_ARGB);
@@ -135,18 +146,30 @@ public class GameWindow extends Frame {
     }
     private void run() {
         setMoveBackground();
+        System.out.println(Integer.toString(backgroundY));
         player.run();
 
         for (PlayerSpell playerSpell : playerSpells) {
             playerSpell.run();
         }
 
-        if (timeEnemy.run()){
+        if (timeEnemy.run() && addBoss == 0){
             Random generator = new Random();
-            Enemy newEnemy = new Enemy(generator.nextInt(3));
+            Enemy newEnemy = new Enemy(generator.nextInt(2));
             newEnemy.setEnemyBullets(this.enemyBullets);
             enemies.add(newEnemy);
             timeEnemy.reset();
+        }
+
+        if (backgroundY >= 0 && addBoss == 0){
+            System.out.println("Add BOSS----------------------------------------------------------");
+            addBoss = 1;
+            boss.setPosition(new Vector2D(192,70));
+            boss.setEnemyBullets(enemyBullets);
+            boss.setDirection(new Vector2D(0,0));
+            boss.setBlood(30);
+            boss.setCoolDownCounter(new FrameCounter(10));
+            enemies.add(boss);
         }
         //System.out.println(enemies.size());
         impact.run();
@@ -156,6 +179,9 @@ public class GameWindow extends Frame {
         }
         for (EnemyBullet enemyBullet : enemyBullets){
             enemyBullet.run();
+        }
+        for (Explosion explosion : explosions){
+            explosion.run();
         }
         System.out.println(Integer.toString(player.getBlood()));
     }
@@ -179,7 +205,7 @@ public class GameWindow extends Frame {
             Font nfont = new Font("Serif", Font.PLAIN, 80);
             backbufferGraphics.setFont(nfont);
             backbufferGraphics.setColor(Color.white);
-            backbufferGraphics.drawString("GAME OVER", 100, 50);
+            backbufferGraphics.drawString("GAME OVER", 100, 200);
             //Thread.sleep(4000);
             //System.exit(0);
         }
@@ -194,6 +220,10 @@ public class GameWindow extends Frame {
         }
         for (EnemyBullet enemyBullet : enemyBullets){
             enemyBullet.render(backbufferGraphics);
+        }
+
+        for (Explosion explosion : explosions){
+            explosion.render(backbufferGraphics);
         }
 
         windowGraphics.drawImage(backbufferImage, 0, 0, null);

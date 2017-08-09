@@ -2,6 +2,7 @@ package touhou.bases;
 
 import touhou.enemies.Enemy;
 import touhou.enemies.EnemyBullet;
+import touhou.explosion.Explosion;
 import touhou.players.PlayerSpell;
 
 import java.util.ArrayList;
@@ -10,7 +11,7 @@ public class RemoveOutside {
     private ArrayList<PlayerSpell> playerSpells;
     private ArrayList<EnemyBullet> enemyBullets;
     private ArrayList<Enemy> enemies;
-
+    private ArrayList<Explosion> explosions;
     public RemoveOutside() {
     }
 
@@ -24,6 +25,10 @@ public class RemoveOutside {
 
     public void setEnemies(ArrayList<Enemy> enemies) {
         this.enemies = enemies;
+    }
+
+    public void setExplosions(ArrayList<Explosion> explosions) {
+        this.explosions = explosions;
     }
 
     public void removeOutside(){
@@ -41,6 +46,12 @@ public class RemoveOutside {
         for (int i = 0; i < enemyBullets.size(); i++) {
             if (enemyBullets.get(i).constraints.outside(enemyBullets.get(i).position) || enemyBullets.get(i).getBlood() <= 0){
                 enemyBullets.remove(i);
+            }
+        }
+
+        for (int i = 0; i < explosions.size(); i++) {
+            if (explosions.get(i).getAnimation().isResetFrame()){
+                explosions.remove(i);
             }
         }
     }

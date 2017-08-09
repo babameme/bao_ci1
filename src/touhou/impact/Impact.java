@@ -3,6 +3,7 @@ package touhou.impact;
 import touhou.bases.Vector2D;
 import touhou.enemies.Enemy;
 import touhou.enemies.EnemyBullet;
+import touhou.explosion.Explosion;
 import touhou.players.Player;
 import touhou.players.PlayerSpell;
 
@@ -12,6 +13,7 @@ public class Impact {
     private ArrayList<PlayerSpell> playerSpells;
     private ArrayList<EnemyBullet> enemyBullets;
     private ArrayList<Enemy> enemies;
+    private ArrayList<Explosion> explosions;
     private Player player;
 
     public void setPlayerSpells(ArrayList<PlayerSpell> playerSpells) {
@@ -28,6 +30,10 @@ public class Impact {
 
     public void setPlayer(Player player) {
         this.player = player;
+    }
+
+    public void setExplosions(ArrayList<Explosion> explosions) {
+        this.explosions = explosions;
     }
 
     private boolean hug(Vector2D a, Vector2D b){
@@ -54,6 +60,9 @@ public class Impact {
                 if (hug(playerSpell.getPosition(), enemy.getPosition())){
                     enemy.reduceBlood(playerSpell.getDamage());
                     playerSpell.reduceBlood(enemy.getDamage());
+                    Explosion explosion = new Explosion();
+                    explosion.setPosition(enemy.getPosition());
+                    explosions.add(explosion);
                 }
             }
         }
@@ -67,6 +76,9 @@ public class Impact {
             if (hug(enemy.getPosition(), player.getPosition())){
                 player.reduceBlood(enemy.getDamage());
                 enemy.reduceBlood(player.getDamage());
+                Explosion explosion = new Explosion();
+                explosion.setPosition(enemy.getPosition());
+                explosions.add(explosion);
             }
         }
     }
