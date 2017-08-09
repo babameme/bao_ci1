@@ -167,7 +167,7 @@ public class GameWindow extends Frame {
             boss.setPosition(new Vector2D(192,70));
             boss.setEnemyBullets(enemyBullets);
             boss.setDirection(new Vector2D(0,0));
-            boss.setBlood(30);
+            boss.setBlood(40);
             boss.setCoolDownCounter(new FrameCounter(10));
             enemies.add(boss);
         }
@@ -208,6 +208,14 @@ public class GameWindow extends Frame {
             backbufferGraphics.drawString("GAME OVER", 100, 200);
             //Thread.sleep(4000);
             //System.exit(0);
+        }
+        else{
+            if (enemies.size() == 0 && backgroundY == 0){
+                Font nfont = new Font("Serif", Font.PLAIN, 80);
+                backbufferGraphics.setFont(nfont);
+                backbufferGraphics.setColor(Color.white);
+                backbufferGraphics.drawString("WIN", 100, 200);
+            }
         }
 
         player.render(backbufferGraphics);

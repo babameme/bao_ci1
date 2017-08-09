@@ -30,7 +30,7 @@ public class Player {
     private boolean spellLock;
     private boolean moveLeftRight;
     private int blood = 30;
-    private int damage = 5;
+    private int damage = 3;
     private int power = 0;
 
     private BufferedImage[] walkingLeft = Sprite.getSprites("assets/images/players/left/", 6);

@@ -19,7 +19,7 @@ public class EnemyBullet {
     private BufferedImage[] imageSprite;
     private Vector2D direction ;
     private int damage = 1;
-    private int blood = 1;
+    private int blood = 2;
 
     public EnemyBullet() {
         imageSprite = imageSprite = Sprite.getSprites("assets/images/enemies/bullets/", 7);
